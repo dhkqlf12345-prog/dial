@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ko" data-theme="white">
+<html lang="ko" data-theme="silver">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Dial</title>
-<meta name="theme-color" content="#dcdce1">
+<meta name="theme-color" content="#0b0b0d">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -15,24 +15,25 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css">
 <style>
-:root{--body1:#fdfdfe;--body2:#dcdce1;--wheel:#ececf0;--wheelEdge:#fafafb;--wheelText:#9a9aa3;--center:#f7f7f9;--centerEdge:#ffffff;--bezel:#8d8f96;
+:root{--bodyBg:linear-gradient(180deg,#c6c9d0 0,#eff0f3 20%,#e2e4e8 55%,#a4a8b0 100%);--wheel:#141417;--wheelEdge:#2e2e35;--wheelText:#e8e8ec;--wheelHi:rgba(255,255,255,.12);--center:#bfc2c9;--centerEdge:#f6f7f9;--bezel:#0c0c0e;
   --lcd:#cdd3c2;--ink:#2b2d33;--lcdLine:#b6bcab}
-[data-theme=black]{--body1:#3a3a41;--body2:#131316;--wheel:#2a2a30;--wheelEdge:#42424b;--wheelText:#b9b9c4;--center:#1b1b1f;--centerEdge:#34343b;--bezel:#000}
+[data-theme=white]{--bodyBg:linear-gradient(165deg,#fdfdfe,#dcdce1);--wheel:#ececf0;--wheelEdge:#fafafb;--wheelText:#9a9aa3;--wheelHi:rgba(255,255,255,.6);--center:#f7f7f9;--centerEdge:#ffffff;--bezel:#8d8f96}
+[data-theme=black]{--bodyBg:linear-gradient(165deg,#3a3a41,#131316);--wheelHi:rgba(255,255,255,.12);--wheel:#2a2a30;--wheelEdge:#42424b;--wheelText:#b9b9c4;--center:#1b1b1f;--centerEdge:#34343b;--bezel:#000}
 [data-light="1"]{--lcd:#dbe9f4;--lcdLine:#c2d3e0}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:var(--body2);color:var(--ink);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;
+body{background:#0b0b0d;display:grid;place-items:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);color:var(--ink);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;
   font:700 20px/1.2 "Galmuri11","Courier New",monospace}
 button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;padding:0}
 [hidden]{display:none!important}
 
-#dev{height:100dvh;max-width:430px;margin:0 auto;display:flex;flex-direction:column;
-  padding:calc(env(safe-area-inset-top) + 22px) 22px calc(env(safe-area-inset-bottom) + 10px);
-  background:linear-gradient(165deg,var(--body1),var(--body2))}
-/* 액정이 휠보다 조금 더 크게: 약 57 대 43 */
-#screen{flex:1.35 1 0;min-height:0;background:var(--lcd);border:4px solid var(--bezel);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;position:relative;
+/* 화면을 꽉 채우지 않고, 둘레에 여백을 둔 기기 모양(세로로 긴 둥근 본체)으로 가운데에 놓는다 */
+#dev{width:min(100vw - 36px,380px);aspect-ratio:10/17.5;max-height:calc(100dvh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;padding:18px 18px 12px;border-radius:34px;background:var(--bodyBg);
+  box-shadow:0 24px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.7),inset 0 0 0 1px rgba(0,0,0,.25),inset 0 -6px 14px rgba(0,0,0,.18)}
+#screen{flex:0 0 46%;min-height:0;background:var(--lcd);border:4px solid var(--bezel);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;position:relative;
   box-shadow:inset 0 3px 8px rgba(0,0,0,.28),0 1px 0 rgba(255,255,255,.7)}
-#sbar{flex:none;height:34px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;border-bottom:2px solid var(--ink)}
+#sbar{flex:none;height:30px;font-size:18px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;border-bottom:2px solid var(--ink)}
 #sbar b{text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #sIcon{display:flex}
 #sClock{text-align:right;font-size:15px}
@@ -40,7 +41,7 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 
 .menu{list-style:none;padding:0;height:100%;overflow-y:auto;scrollbar-width:none}
 .menu::-webkit-scrollbar{display:none}
-.menu li{display:flex;align-items:center;gap:8px;min-height:11.111%;padding:0 10px;cursor:pointer;font-size:20px} /* 한 화면에 딱 9줄 */
+.menu li{display:flex;align-items:center;gap:8px;min-height:14.285%;padding:0 9px;cursor:pointer;font-size:18px} /* 한 화면에 딱 7줄 */
 .menu .lb{flex:1;min-width:0;display:flex;flex-direction:column}
 .menu b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .menu small{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -49,22 +50,22 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 .menu li.dim{opacity:.6;cursor:default}
 .menu li.sel{background:var(--ink);color:var(--lcd);opacity:1}
 
-.np{height:100%;display:flex;flex-direction:column;padding:10px 12px 12px;text-align:center}
-.np-count{font-size:15px;text-align:left}
-.np-t{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:8px;overflow:hidden}
-.np-t b{font-size:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.np-t span{font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.np-bar{height:16px;border:2px solid var(--ink);padding:2px}
+.np{height:100%;display:flex;flex-direction:column;padding:6px 10px 8px;text-align:center}
+.np-count{font-size:14px;text-align:left}
+.np-t{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:5px;overflow:hidden}
+.np-t b{font-size:21px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.np-t span{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.np-bar{height:14px;border:2px solid var(--ink);padding:2px}
 .np-bar i{display:block;height:100%;width:0;background:var(--ink)}
 .np-time{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-top:4px}
 
 #toast{position:absolute;left:8px;right:8px;bottom:8px;background:var(--ink);color:var(--lcd);padding:8px 10px;font-size:16px;text-align:center;pointer-events:none}
 #toast.off{display:none}
 
-#wheelWrap{flex:1 1 0;min-height:0;display:grid;place-items:center;padding:14px 0 4px}
-#wheel{width:min(78vw,320px,37dvh);aspect-ratio:1;border-radius:50%;position:relative;touch-action:none;cursor:grab;
+#wheelWrap{flex:1 1 0;min-height:0;display:grid;place-items:center;container-type:size}
+#wheel{width:min(72cqw,86cqh);aspect-ratio:1;border-radius:50%;position:relative;touch-action:none;cursor:grab;
   background:radial-gradient(circle at 35% 22%,var(--wheelEdge),var(--wheel) 62%);
-  box-shadow:0 8px 20px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -3px 8px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.08)}
+  box-shadow:0 8px 20px rgba(0,0,0,.2),inset 0 1px 0 var(--wheelHi),inset 0 -3px 8px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.08)}
 #wheel:active{cursor:grabbing}
 .wl{position:absolute;color:var(--wheelText);font:800 13px/1 system-ui,sans-serif;letter-spacing:1.5px;pointer-events:none;display:flex}
 .wl.t{top:8%;left:50%;transform:translateX(-50%)}
@@ -89,10 +90,6 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 #iosTip button{width:36px;height:36px;flex:none;color:#aaa;font-size:16px}
 body.drag::after{content:"여기에 놓아서 추가";position:fixed;inset:12px;border:3px dashed #fff;border-radius:20px;background:rgba(10,10,14,.88);color:#fff;display:grid;place-items:center;font-size:24px;z-index:50;pointer-events:none}
 
-@media(min-width:500px){
-  body{background:#0b0b0d;display:grid;place-items:center}
-  #dev{width:390px;height:min(100dvh - 32px,780px);border-radius:38px;box-shadow:0 30px 70px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.6);padding:34px 34px 18px}
-}
 </style>
 </head>
 <body>
@@ -142,7 +139,7 @@ $$('[data-ic]').forEach(b=>b.innerHTML=ic(b.dataset.ic,b.dataset.s||24));
 const audio=$('#audio'),view=$('#view'),root=document.documentElement;
 let db,tracks=[],lists=[],queue=[],curId=null,srcUrl=null,npMode='seek',volOK=false,pendingList=null;
 let shuffle=ls.get('dialShuffle','0')==='1',repeat=+ls.get('dialRepeat','0');
-const THEMES=[['white','화이트','#dcdce1'],['black','블랙','#131316']];
+const THEMES=[['silver','실버','#0b0b0d'],['white','화이트','#0b0b0d'],['black','블랙','#0b0b0d']];
 const coverUrls=new Map();
 const NOART='알 수 없는 아티스트',NOALB='알 수 없는 앨범';
 
@@ -297,7 +294,7 @@ function tick(){const bar=$('.np-bar i');if(!bar)return;const d=audio.duration||
   bar.style.width=(d?c/d*100:0)+'%';$('.tcur').textContent=fmt(c);$('.tdur').textContent='-'+fmt(Math.max(d-c,0))}
 function syncState(){$('#sIcon').innerHTML=curId?ic(audio.paused?'pause':'play',20):''}
 function setTheme(name){const th=THEMES.find(x=>x[0]===name)||THEMES[0];root.dataset.theme=th[0];
-  $('meta[name=theme-color]').content=th[2];ls.set('dialTheme',th[0])}
+  $('meta[name=theme-color]').content=th[2];ls.set('dialBody',th[0])}
 
 /* ---------- 휠 손맛: 진동과 클릭음 ---------- */
 // 아이폰은 웹 앱이 진동을 낼 방법이 없어서(휠을 끌며 돌리는 동안은 더더욱) 클릭음을 기본으로 켠다.
@@ -419,7 +416,7 @@ addEventListener('drop',e=>{e.preventDefault();dragN=0;document.body.classList.r
 
 /* ---------- 시작 ---------- */
 (async()=>{
-  setTheme(ls.get('dialTheme','white'));root.dataset.light=ls.get('dialLight','0');
+  setTheme(ls.get('dialBody','silver'));root.dataset.light=ls.get('dialLight','0');
   const clock=()=>{const d=new Date();$('#sClock').textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')};
   clock();setInterval(clock,20000);
   // 아이폰은 앱에서 음량을 바꿀 수 없으므로(기기 버튼만 가능) 그때는 음량 모드를 쓰지 않는다

@@ -28,7 +28,11 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 [hidden]{display:none!important}
 
 /* 화면을 꽉 채우지 않고, 둘레에 여백을 둔 기기 모양(세로로 긴 둥근 본체)으로 가운데에 놓는다 */
-#dev{width:min(100vw - 36px,380px);aspect-ratio:10/17.5;max-height:calc(100dvh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+/* 크기는 오래된 아이폰에서도 통하는 단위만 쓴다: 폭의 1.75배 높이(175vw - 63px), 화면보다 길면 화면에 맞춤.
+   둘째 height 줄(dvh)은 지원하는 기기에서만 첫째 줄을 덮어쓴다. */
+#dev{width:min(100vw - 36px,380px);
+  height:min(175vw - 63px,665px,100vh - 36px);
+  height:min(175vw - 63px,665px,100dvh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   display:flex;flex-direction:column;padding:18px 18px 12px;border-radius:34px;background:var(--bodyBg);
   box-shadow:0 24px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.7),inset 0 0 0 1px rgba(0,0,0,.25),inset 0 -6px 14px rgba(0,0,0,.18)}
 #screen{flex:0 0 46%;min-height:0;background:var(--lcd);border:4px solid var(--bezel);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;position:relative;
@@ -41,7 +45,8 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 
 .menu{list-style:none;padding:0;height:100%;overflow-y:auto;scrollbar-width:none}
 .menu::-webkit-scrollbar{display:none}
-.menu li{display:flex;align-items:center;gap:8px;min-height:14.285%;padding:0 9px;cursor:pointer;font-size:18px} /* 한 화면에 딱 7줄 */
+.menu li>*+*{margin-left:8px}
+.menu li{display:flex;align-items:center;min-height:14.285%;padding:0 9px;cursor:pointer;font-size:18px} /* 한 화면에 딱 7줄 */
 .menu .lb{flex:1;min-width:0;display:flex;flex-direction:column}
 .menu b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .menu small{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -52,7 +57,8 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 
 .np{height:100%;display:flex;flex-direction:column;padding:6px 10px 8px;text-align:center}
 .np-count{font-size:14px;text-align:left}
-.np-t{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:5px;overflow:hidden}
+.np-t{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.np-t>*+*{margin-top:5px}
 .np-t b{font-size:21px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .np-t span{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .np-bar{height:14px;border:2px solid var(--ink);padding:2px}
@@ -62,8 +68,10 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 #toast{position:absolute;left:8px;right:8px;bottom:8px;background:var(--ink);color:var(--lcd);padding:8px 10px;font-size:16px;text-align:center;pointer-events:none}
 #toast.off{display:none}
 
-#wheelWrap{flex:1 1 0;min-height:0;display:grid;place-items:center;container-type:size}
-#wheel{width:min(72cqw,86cqh);aspect-ratio:1;border-radius:50%;position:relative;touch-action:none;cursor:grab;
+/* 휠 크기는 sizeWheel()이 픽셀로 정한다. 아래 218px는 스크립트가 돌기 전의 기본값이다.
+   (컨테이너 단위 cqw/cqh는 구형 아이폰에서 무시되어 휠이 아예 안 보였다) */
+#wheelWrap{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center}
+#wheel{width:218px;height:218px;flex:none;border-radius:50%;position:relative;touch-action:none;cursor:grab;
   background:radial-gradient(circle at 35% 22%,var(--wheelEdge),var(--wheel) 62%);
   box-shadow:0 8px 20px rgba(0,0,0,.2),inset 0 1px 0 var(--wheelHi),inset 0 -3px 8px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.08)}
 #wheel:active{cursor:grabbing}
@@ -72,7 +80,7 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 .wl.b{bottom:7%;left:50%;transform:translateX(-50%)}
 .wl.l{left:8%;top:50%;transform:translateY(-50%)}
 .wl.r{right:8%;top:50%;transform:translateY(-50%)}
-#ok{position:absolute;inset:32%;border-radius:50%;background:radial-gradient(circle at 40% 28%,var(--centerEdge),var(--center));
+#ok{position:absolute;top:32%;right:32%;bottom:32%;left:32%;border-radius:50%;background:radial-gradient(circle at 40% 28%,var(--centerEdge),var(--center));
   box-shadow:inset 0 -2px 5px rgba(0,0,0,.14),0 0 0 1px rgba(0,0,0,.14),0 2px 4px rgba(0,0,0,.15)}
 #ok:active{filter:brightness(.9)}
 /* 스위치의 기본 모양을 지우면 진동도 사라지므로 appearance는 건드리지 않고 투명하게만 한다 */
@@ -82,13 +90,13 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;paddin
 .hz.l,.hz.r{width:27%;height:30%;top:35%}.hz.l{left:1%}.hz.r{right:1%}
 .hz input{visibility:hidden;position:absolute;margin:0}
 
-#iosTip{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 12px);z-index:30;display:flex;align-items:center;gap:12px;background:#1d1d22;color:#fff;border-radius:14px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);font:400 13px/1.4 system-ui,sans-serif}
+#iosTip{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 12px);z-index:30;display:flex;align-items:center;background:#1d1d22;color:#fff;border-radius:14px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);font:400 13px/1.4 system-ui,sans-serif}
 #iosTip img{border-radius:11px;flex:none}
-#iosTip p{flex:1;color:#d6d6d6}
+#iosTip p{flex:1;color:#d6d6d6;margin:0 12px}
 #iosTip p b{color:#fff}
 #iosTip p>b:first-child{display:block;font-size:15px}
 #iosTip button{width:36px;height:36px;flex:none;color:#aaa;font-size:16px}
-body.drag::after{content:"여기에 놓아서 추가";position:fixed;inset:12px;border:3px dashed #fff;border-radius:20px;background:rgba(10,10,14,.88);color:#fff;display:grid;place-items:center;font-size:24px;z-index:50;pointer-events:none}
+body.drag::after{content:"여기에 놓아서 추가";position:fixed;top:12px;right:12px;bottom:12px;left:12px;border:3px dashed #fff;border-radius:20px;background:rgba(10,10,14,.88);color:#fff;display:grid;place-items:center;font-size:24px;z-index:50;pointer-events:none}
 
 </style>
 </head>
@@ -141,7 +149,7 @@ let db,tracks=[],lists=[],queue=[],curId=null,srcUrl=null,npMode='seek',volOK=fa
 let shuffle=ls.get('dialShuffle','0')==='1',repeat=+ls.get('dialRepeat','0');
 const THEMES=[['silver','실버','#0b0b0d'],['white','화이트','#0b0b0d'],['black','블랙','#0b0b0d']];
 const coverUrls=new Map();
-const NOART='알 수 없는 아티스트',NOALB='알 수 없는 앨범';
+const NOART='알 수 없는 아티스트',NOALB='알 수 없는 앨범',VERSION='5';
 
 /* ---------- 저장소 (IndexedDB): tracks = 곡, lists = 플레이리스트 ---------- */
 const openDB=()=>new Promise((res,rej)=>{const r=indexedDB.open('dial',1);
@@ -265,7 +273,21 @@ function build(s){
     {label:'백라이트',right:root.dataset.light==='1'?'켬':'끔',go:()=>{root.dataset.light=root.dataset.light==='1'?'0':'1';ls.set('dialLight',root.dataset.light);draw()}},
     {label:'본체 색상',right:th[1],go:()=>{setTheme(THEMES[(THEMES.indexOf(th)+1)%THEMES.length][0]);draw()}},
     {label:'곡 삭제',chev:1,go:()=>push('del')},
-    {label:'저장된 곡',right:tracks.length+'곡',dim:true}]}}
+    {label:'저장된 곡',right:tracks.length+'곡',dim:true},
+    {label:'기기 정보',chev:1,go:()=>push('info')}]}}
+  case 'info':{ // 문제가 생겼을 때 이 화면을 찍어 보내면 원인을 찾기 쉽다
+    const ua=navigator.userAgent,os=(ua.match(/OS (\d+)[_.](\d+)/)||[]).slice(1).join('.'),sf=(ua.match(/Version\/([\d.]+)/)||[])[1];
+    const and=(ua.match(/Android ([\d.]+)/)||[])[1];
+    const app=navigator.standalone||matchMedia('(display-mode: standalone)').matches;
+    const sw=(()=>{try{const i=document.createElement('input');i.type='checkbox';return 'switch' in i}catch{return false}})();
+    return {title:'기기 정보',items:[
+      {label:and?'안드로이드':'iOS',right:and||os||'알 수 없음',dim:true},
+      {label:'Safari',right:sf||'-',dim:true},
+      {label:'홈 화면 앱',right:app?'예':'아니요',dim:true},
+      {label:'진동 방식',right:navigator.vibrate?'기본 진동':sw?'누를 때만':'지원 안 됨',dim:true},
+      {label:'화면',right:innerWidth+'x'+innerHeight,dim:true},
+      {label:'휠 크기',right:Math.round(wheel.getBoundingClientRect().width)+'px',dim:true},
+      {label:'앱 버전',right:VERSION,dim:true}]}}
   case 'del':return {title:'곡 삭제',items:tracks.length?tracks.map(t=>({label:t.title,go:()=>push('delc',t.id)})):NONE};
   case 'delc':{const t=tracks.find(x=>x.id===s.arg);if(!t)return null;
     return {title:'삭제할까요?',items:[{label:'취소',go:back},{label:'삭제: '+t.title,sub:'원본 파일은 지워지지 않아요',go:()=>del(t.id)}]}}
@@ -414,8 +436,15 @@ addEventListener('dragleave',()=>{if(--dragN<=0){dragN=0;document.body.classList
 addEventListener('drop',e=>{e.preventDefault();dragN=0;document.body.classList.remove('drag');
   const s=topS();addFiles(e.dataTransfer.files,s.id==='list'?s.arg:null)});
 
+/* ---------- 휠 크기: 남은 자리에 맞춰 픽셀로 직접 정한다 (어떤 아이폰에서도 보이도록) ---------- */
+function sizeWheel(){const w=$('#wheelWrap'),s=Math.floor(Math.min(w.clientWidth*.72,w.clientHeight*.86));
+  if(s>60){wheel.style.width=wheel.style.height=s+'px'}}
+addEventListener('resize',sizeWheel);addEventListener('orientationchange',()=>setTimeout(sizeWheel,300));
+if(window.ResizeObserver)new ResizeObserver(sizeWheel).observe($('#wheelWrap'));
+
 /* ---------- 시작 ---------- */
 (async()=>{
+  sizeWheel();
   setTheme(ls.get('dialBody','silver'));root.dataset.light=ls.get('dialLight','0');
   const clock=()=>{const d=new Date();$('#sClock').textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')};
   clock();setInterval(clock,20000);
